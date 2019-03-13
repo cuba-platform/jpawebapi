@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+    <suppress files="XMLConverter.java" checks="LineLength"/>
+    <suppress files="XMLConverter.java" checks="AvoidNestedBlocks"/>
+
+    <suppress files="DataServiceController.java" checks="ParameterNumber"/>
+    <suppress files="DataServiceController.java" checks="RightCurly"/>
+    <suppress files="DataServiceController.java" checks="LocalVariableName"/>
+
+    <suppress files="JSONConverter.java" checks="MethodName"/>
+    <suppress files="JSONConverter.java" checks="AvoidNestedBlocks"/>
+
+    <suppress files="MyJSONObject.java" checks="MemberName"/>
+
+    <suppress files="LoginServiceController.java" checks="StaticVariableName"/>
+
+    <suppress files="SwaggerConfiguration.java" checks="NewlineAtEndOfFile"/>
+    <suppress files="JpaWebApiServletInitializer.java" checks="NewlineAtEndOfFile"/>
+</suppressions>
