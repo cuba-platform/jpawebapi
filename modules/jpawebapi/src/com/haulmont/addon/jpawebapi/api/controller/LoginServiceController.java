@@ -66,7 +66,7 @@ public class LoginServiceController {
     @Inject
     protected UserSessionService userSessionService;
 
-    protected static MimeType FORM_TYPE;
+    protected static final MimeType FORM_TYPE;
 
     static {
         try {

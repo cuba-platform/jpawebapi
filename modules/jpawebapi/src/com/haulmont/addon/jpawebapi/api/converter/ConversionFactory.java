@@ -49,7 +49,9 @@ public class ConversionFactory {
         converters.add(jsonConverter);
         converters.add(xmlConverter);
 
-        return restApiVersion = jpaWebApiConfig.getRestApiVersion();
+        restApiVersion = jpaWebApiConfig.getRestApiVersion();
+
+        return restApiVersion;
     }
 
     public Converter getConverter(MimeType requestedForm) {
