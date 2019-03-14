@@ -22,6 +22,8 @@ Key API features:
 - Middleware service calls.
 - User authentication.
 
+Read addon Wiki for an additional information: [link](https://github.com/cuba-platform/jpawebapi/wiki).
+
 ## Compatibility with platform versions
 
 | Add-on        | Platform      |
@@ -51,3 +53,19 @@ After that the JPA Web API functionality will be available at:
 
 JPA Web API URL can be customized via `jpawebapi.mapping.url` app property
 both for `web` and `portal` application modules.
+
+## Demo
+
+1. Login as `admin / admin` with `GET` request:
+
+```
+http://localhost:8080/app/dispatch/api/login?u=admin&p=admin&l=ru
+```
+
+2. Load `Users` list using auth token:
+
+```
+http://localhost:8080/app/dispatch/api/query.json?e=sec$Role&q=select+r+from+sec$Role+r&s=b376f1d2-15d7-ea33-4048-2199de9721e7
+```
+
+![demo](./img/demo.jpg)
