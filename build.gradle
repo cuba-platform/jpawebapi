@@ -272,6 +272,7 @@ configure(jpaWebApiModule) {
 
     dependencies {
         compile(globalModule)
+        compileOnly(servletApi)
         compile("com.haulmont.cuba:cuba-client:$cubaVersion")
         compile('org.springframework.security:spring-security-core:5.1.2.RELEASE')
         compile('org.springframework:spring-webmvc:5.1.2.RELEASE')
