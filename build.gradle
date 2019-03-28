@@ -19,7 +19,6 @@ buildscript {
     ext.cubaVersion = '7.1-SNAPSHOT'
     repositories {
         mavenLocal()
-
         if (System.getenv('HAULMONT_REPOSITORY_URL')) {
             maven {
                 credentials {
@@ -28,21 +27,9 @@ buildscript {
                 }
                 url System.getenv('HAULMONT_REPOSITORY_URL')
             }
-        }
-        
-        jcenter()
-
-        /*
-         * maven { url "https://dl.bintray.com/cuba-platform/main" }
-         * 
-         * TODO: temprorary - use Bintray later
-         */
-        maven {
-            url 'https://repo.cuba-platform.com/content/groups/work'
-            credentials {
-                username 'cuba' 
-                password 'cuba123'
-            }
+        } else {
+            jcenter()
+            maven { url "https://dl.bintray.com/cuba-platform/main" }
         }
     }
 
@@ -125,12 +112,6 @@ configure([globalModule, coreModule, webModule, portalModule, jpaWebApiModule]) 
 }
 
 configure(globalModule) {
-    entitiesEnhancing {
-        main {
-            enabled = true
-        }
-    }
-
     jar {
         manifest {
             attributes('App-Component-Id': cuba.artifact.group)
@@ -206,17 +187,11 @@ configure(webModule) {
         archives webArchive
     }
 
-    task clearMessagesCache(type: CubaClearMessagesCache) {
-        appName = "${modulePrefix}"
-    }
-
     task deployConf(type: Copy) {
         from file('src')
         include "com/haulmont/addon/jpawebapi/**"
         into "$cuba.tomcat.dir/conf/${modulePrefix}"
     }
-
-    deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') {
         doLast {
@@ -273,6 +248,7 @@ configure(jpaWebApiModule) {
     dependencies {
         compile(globalModule)
         compileOnly(servletApi)
+
         compile("com.haulmont.cuba:cuba-client:$cubaVersion")
         compile('org.springframework.security:spring-security-core:5.1.2.RELEASE')
         compile('org.springframework:spring-webmvc:5.1.2.RELEASE')
@@ -289,7 +265,9 @@ task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/webapps/${modulePrefix}-portal")
 }
 
-task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefix}-web:deploy", ":${modulePrefix}-portal:deploy"], description: 'Redeploys applications and restarts local Tomcat') {
+task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefix}-web:deploy", ":${modulePrefix}-portal:deploy"],
+        description: 'Redeploys applications and restarts local Tomcat') {
+
     doLast {
         ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
             not {
