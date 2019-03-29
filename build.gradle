@@ -47,6 +47,14 @@ buildscript {
     }
 }
 
+configurations {
+    bom
+}
+
+dependencies {
+    bom("com.haulmont.cuba:cuba-global:$cubaVersion")
+}
+
 def modulePrefix = 'jpawebapi'
 
 def globalModule = project(":${modulePrefix}-global")
@@ -55,10 +63,10 @@ def webModule = project(":${modulePrefix}-web")
 def portalModule = project(":${modulePrefix}-portal")
 def jpaWebApiModule = project(":${modulePrefix}-jpawebapi")
 
-def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
-
 apply(plugin: 'cuba')
 apply(plugin: 'addon-gradle-plugin')
+
+bom.load file('modules/global/src/com/haulmont/addon/jpawebapi/bom.properties')
 
 cuba {
     artifact {
@@ -92,8 +100,6 @@ dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.4.1'
-
 configure([globalModule, coreModule, webModule, portalModule, jpaWebApiModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
@@ -102,7 +108,7 @@ configure([globalModule, coreModule, webModule, portalModule, jpaWebApiModule]) 
     apply(plugin: 'addon-gradle-plugin')
 
     dependencies {
-        testCompile('junit:junit:4.12')
+        testCompile(bom['junit:junit'])
     }
 
     task sourceJar(type: Jar) {
@@ -136,9 +142,9 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        compileOnly(servletApi)
-        jdbc(hsql)
-        testRuntime(hsql)
+        compileOnly(bom['javax.servlet:javax.servlet-api'])
+        jdbc(bom['org.hsqldb:hsqldb'])
+        testRuntime(bom['org.hsqldb:hsqldb'])
     }
 
     task cleanConf(description: 'Cleans up conf directory') {
@@ -180,7 +186,7 @@ configure(webModule) {
     }
 
     dependencies {
-        compileOnly(servletApi)
+        compileOnly(bom['javax.servlet:javax.servlet-api'])
         compile(globalModule)
         compile(jpaWebApiModule)
     }
@@ -220,7 +226,7 @@ configure(webModule) {
 
 configure(portalModule) {
     dependencies {
-        compileOnly(servletApi)
+        compileOnly(bom['javax.servlet:javax.servlet-api'])
         compile(globalModule)
         compile(jpaWebApiModule)
     }
@@ -255,14 +261,14 @@ configure(jpaWebApiModule) {
 
     dependencies {
         compile(globalModule)
-        compileOnly(servletApi)
+        compileOnly(bom['javax.servlet:javax.servlet-api'])
 
         compile("com.haulmont.cuba:cuba-client:$cubaVersion")
-        compile('org.springframework.security:spring-security-core:5.1.2.RELEASE')
-        compile('org.springframework:spring-webmvc:5.1.2.RELEASE')
-        compile('io.springfox:springfox-swagger2:2.9.2')
-        compile('io.springfox:springfox-swagger-ui:2.9.2')
-        compile('io.swagger:swagger-models:1.5.21')
+        compile(bom['org.springframework.security:spring-security-core'])
+        compile(bom['org.springframework:spring-webmvc'])
+        compile(bom['io.springfox:springfox-swagger2'])
+        compile(bom['io.springfox:springfox-swagger-ui'])
+        compile(bom['io.swagger:swagger-models'])
     }
 }
 

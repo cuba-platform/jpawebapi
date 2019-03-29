@@ -21,6 +21,7 @@
 
     <module name="global" blocks="*">
         <artifact name="jpawebapi-global" appJar="true"/>
+        <artifact name="jpawebapi-core" classifier="db" ext="zip" configuration="dbscripts"/>
 
         <property name="cuba.metadataConfig"
                   value="+com/haulmont/addon/jpawebapi/metadata.xml"/>
