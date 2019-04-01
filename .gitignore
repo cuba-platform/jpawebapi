@@ -5,6 +5,7 @@
 *.iml
 
 build/*
+modules/*/build/
 deploy/*
 out/*
 
