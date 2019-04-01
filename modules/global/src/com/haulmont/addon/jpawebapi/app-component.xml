@@ -40,6 +40,7 @@
         <property name="jpawebapi.mapping.url" value="/api/*"/>
         <property name="jpawebapi.springContextConfig"
                   value="+com/haulmont/addon/jpawebapi/sys/jpawebapi-dispatcher-spring.xml"/>
+        <property name="cuba.rest.allowedOrigins" value="*"/>
     </module>
 
     <module name="web" dependsOn="global" blocks="web">
@@ -55,5 +56,6 @@
         <property name="jpawebapi.mapping.url" value="/dispatch/api/*"/>
         <property name="jpawebapi.springContextConfig"
                   value="+com/haulmont/addon/jpawebapi/sys/jpawebapi-dispatcher-spring.xml"/>
+        <property name="cuba.rest.allowedOrigins" value="*"/>
     </module>
 </app-component>
