@@ -269,6 +269,9 @@ configure(jpaWebApiModule) {
         compile(bom['io.springfox:springfox-swagger2'])
         compile(bom['io.springfox:springfox-swagger-ui'])
         compile(bom['io.swagger:swagger-models'])
+        compile(bom['com.fasterxml.jackson.core:jackson-databind'])
+        compile(bom['com.fasterxml.jackson.core:jackson-annotations'])
+
     }
 }
 
