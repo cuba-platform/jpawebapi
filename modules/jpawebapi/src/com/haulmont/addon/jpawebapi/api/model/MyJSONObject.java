@@ -1,8 +1,5 @@
 /*
- * Based on JEST, part of the OpenJPA framework.
- *
- *
- * Copyright (c) 2008-2018 Haulmont.
+ * Copyright (c) 2008-2019 Haulmont.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
