@@ -1,6 +1,6 @@
 <!-- 
-Please use https://www.cuba-platform.com/discuss for discussion, support, and reporting problems about <Addon name>.
-This repository is only for issues of the <Addon name>.
+Please use https://www.cuba-platform.com/discuss for discussion, support, and reporting problems about JPA Web API.
+This repository is only for issues of the JPA Web API.
 
 When creating an issue, provide as much as possible of the following information: 
 -->
