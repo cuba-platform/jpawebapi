@@ -265,6 +265,8 @@ configure(jpaWebApiModule) {
 
         compile("com.haulmont.cuba:cuba-client:$cubaVersion")
         compile(bom['org.springframework.security:spring-security-core'])
+        compile(bom['org.springframework.security:spring-security-web'])
+        compile(bom['org.springframework.security:spring-security-config'])
         compile(bom['org.springframework:spring-webmvc'])
         compile(bom['io.springfox:springfox-swagger2'])
         compile(bom['io.springfox:springfox-swagger-ui'])
