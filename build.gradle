@@ -265,6 +265,8 @@ configure(jpaWebApiModule) {
 
         compile("com.haulmont.cuba:cuba-client:$cubaVersion")
         compile(bom['org.springframework.security:spring-security-core'])
+        compile(bom['org.springframework.security:spring-security-web'])
+        compile(bom['org.springframework.security:spring-security-config'])
         compile(bom['org.springframework:spring-webmvc'])
         compile(bom['io.springfox:springfox-swagger2'])
         compile(bom['io.springfox:springfox-swagger-ui'])
@@ -293,4 +295,13 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
         }
         start.execute()
     }
+}
+
+task buildWar(type: CubaWarBuilding) {
+    includeContextXml = true
+    includeJdbcDriver = true
+    appProperties = ['cuba.automaticDatabaseUpdate': true]
+    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
+    appHome = '../app_home'
+    coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
 }
