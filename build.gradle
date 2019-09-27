@@ -16,7 +16,7 @@
  */
 
 buildscript {
-    ext.cubaVersion = '7.1-SNAPSHOT'
+    ext.cubaVersion = '7.1.1'
     repositories {
         mavenLocal()
         if (System.getenv('HAULMONT_REPOSITORY_URL')) {
@@ -43,7 +43,7 @@ buildscript {
 
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
-        classpath "com.haulmont.gradle:addon-gradle-plugin:1.0.3"
+        classpath "com.haulmont.gradle:addon-gradle-plugin:1.1.2"
     }
 }
 
@@ -71,7 +71,7 @@ bom.load file('modules/global/src/com/haulmont/addon/jpawebapi/bom.properties')
 cuba {
     artifact {
         group = 'com.haulmont.addon.jpawebapi'
-        version = '0.1'
+        version = '1.0'
         isSnapshot = true
     }
     tomcat {
@@ -118,10 +118,6 @@ configure([globalModule, coreModule, webModule, portalModule, jpaWebApiModule]) 
 
     artifacts {
         archives sourceJar
-    }
-
-    findbugs {
-        excludeFilter = new File("${rootProject.projectDir}/config/findbugs/excludeBugsFilter.xml")
     }
 }
 
