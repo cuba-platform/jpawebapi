@@ -23,7 +23,7 @@
       maxIdle="2"
       maxWaitMillis="5000"
       driverClassName="org.hsqldb.jdbc.JDBCDriver"
-      url="jdbc:hsqldb:hsql://localhost:9001/jpawebapi"
+      url="jdbc:hsqldb:hsql://localhost:9010/jpawebapi"
       username="sa"
       password=""/>
 
