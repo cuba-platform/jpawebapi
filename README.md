@@ -28,7 +28,7 @@ Read addon Wiki for an additional information: [link](https://github.com/cuba-pl
 
 | Add-on        | Platform      |
 |:------------- |:------------- |
-| 0.1-SNAPSHOT  | 7.1-SNAPSHOT  |
+| 1.0.0  | 7.1-SNAPSHOT  |
 
 ## Installation
 
