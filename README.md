@@ -28,7 +28,7 @@ Read addon Wiki for an additional information: [link](https://github.com/cuba-pl
 
 | Add-on        | Platform      |
 |:------------- |:------------- |
-| 1.0.0  | 7.1-SNAPSHOT  |
+| 1.0.0  | 7.1.x  |
 
 ## Installation
 
@@ -40,7 +40,7 @@ To install the component in your project, do the following steps:
 
 3. Paste the addon coordinates in the corresponding field:
 
-    `com.haulmont.addon.jpawebapi:jpawebapi-global:0.1-SNAPSHOT`
+    `com.haulmont.addon.jpawebapi:jpawebapi-global:1.0.0`
 
 4. Click **OK** to save the project properties.
 
