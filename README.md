@@ -1,4 +1,4 @@
-# CUBA JPA Web API Addon
+# JPA Web API
 
 [![license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Build Status](https://travis-ci.org/cuba-platform/jpawebapi.svg?branch=master)](https://travis-ci.org/cuba-platform/jpawebapi)
@@ -6,12 +6,9 @@
 
 ## Overview
 
-The universal JPA web API enables to load and save any entities
-defined in the application data model by sending simple HTTP requests. 
+The universal JPA web API enables to load and save any entities defined in the application data model by sending simple HTTP requests.
 
-This provides an easy way to integrate with a wide range of third-party 
-applications – from the JavaScript code executed in the browser to arbitrary 
-systems running on Java, .NET, PHP or any other platform.
+This provides an easy way to integrate with a wide range of third-party applications – from the JavaScript code executed in the browser to arbitrary systems running on Java, .NET, PHP or any other platform.
 
 Key API features:
 
@@ -22,27 +19,36 @@ Key API features:
 - Middleware service calls.
 - User authentication.
 
-Read addon Wiki for an additional information: [link](https://github.com/cuba-platform/jpawebapi/wiki).
-
-## Compatibility with platform versions
-
-| Add-on        | Platform      |
-|:------------- |:------------- |
-| 1.0.0  | 7.1.x  |
+Read addon [Wiki](https://github.com/cuba-platform/jpawebapi/wiki) for additional information.
 
 ## Installation
 
-To install the component in your project, do the following steps:
+You can install the add-on by coordinates choosing the required version of the add-on from the table.
 
-1. Open **Project -> Properties** in the project tree.
+In case you want to install the add-on by manual editing or by building from sources see the complete add-ons installation guide in [CUBA Platform documentation](https://doc.cuba-platform.com/manual-latest/manual.html#app_components_usage).
 
-2. On the **App components** pane click the **Plus** button next to **Custom components**.
+### By Coordinates
 
-3. Paste the addon coordinates in the corresponding field:
+1. Open your application in CUBA Studio. Check the latest version of CUBA Studio on the [CUBA Platform site](https://www.cuba-platform.com/download/previous-studio/).
+2. Go to *CUBA -> Marketplace* in the main menu.
 
-    `com.haulmont.addon.jpawebapi:jpawebapi-global:1.0.0`
+ ![marketplace](img/marketplace.png)
 
-4. Click **OK** to save the project properties.
+3. Click the icon in the upper-right corner.
+
+ ![by-coordinates](img/by-coordinates.png)
+
+4. Paste the add-on coordinates in the corresponding field as follows:
+
+ `com.haulmont.addon.jpawebapi:jpawebapi-global:<add-on version>`
+
+ where `<add-on version>` is compatible with the used version of the CUBA platform.
+
+ | Platform Version | Add-on Version |
+|------------------|----------------|
+| 7.1.X            | 1.0.0          |
+
+5. Click *Install* and apply the changes. The add-on will be installed to your project.
 
 After that the JPA Web API functionality will be available at:
 
@@ -51,8 +57,7 @@ After that the JPA Web API functionality will be available at:
 
 ## Customization
 
-JPA Web API URL can be customized via `jpawebapi.mapping.url` app property
-both for `web` and `portal` application modules.
+JPA Web API URL can be customized via `jpawebapi.mapping.url` app property both for `web` and `portal` application modules.
 
 ## Demo
 
