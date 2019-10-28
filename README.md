@@ -32,11 +32,11 @@ In case you want to install the add-on by manual editing or by building from sou
 1. Open your application in CUBA Studio. Check the latest version of CUBA Studio on the [CUBA Platform site](https://www.cuba-platform.com/download/previous-studio/).
 2. Go to *CUBA -> Marketplace* in the main menu.
 
- ![marketplace](img/marketplace.png)
+ ![marketplace](img/marketplace.jpg)
 
 3. Click the icon in the upper-right corner.
 
- ![by-coordinates](img/by-coordinates.png)
+ ![by-coordinates](img/by-coordinates.jpg)
 
 4. Paste the add-on coordinates in the corresponding field as follows:
 
