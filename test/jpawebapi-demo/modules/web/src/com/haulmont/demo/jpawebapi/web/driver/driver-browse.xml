@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="driversTable"
+        messagesPack="com.haulmont.demo.jpawebapi.web.driver">
+    <data readOnly="true">
+        <collection id="driversDc"
+                    class="com.haulmont.demo.jpawebapi.core.entity.Driver"
+                    view="driver-view">
+            <loader id="driversDl">
+                <query>
+                    <![CDATA[select e from jpademo_Driver e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="driversTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="driversTable"
+                dataLoader="driversDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="driversTable"
+                    width="100%"
+                    dataContainer="driversDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="firstName"/>
+                <column id="lastName"/>
+                <column id="age"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="driversTable.create"/>
+                <button id="editBtn" action="driversTable.edit"/>
+                <button id="removeBtn" action="driversTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

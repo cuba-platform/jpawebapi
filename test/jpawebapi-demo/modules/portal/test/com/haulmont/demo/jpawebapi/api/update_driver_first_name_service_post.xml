@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2008-2016 Haulmont. All rights reserved.
+  ~ Use is subject to license terms, see http://www.cuba-platform.com/commercial-software-license for details.
+  -->
+
+<ServiceRequest  xmlns="http://schemas.haulmont.com/cuba/restapi-service-v2.xsd">
+    <service>demo_PortalTestService</service>
+    <method>updateFirstName</method>
+    <params>
+        <param name="param0">$ENTITY-TO_BE_REPLACED_ID$</param>
+        <param name="param1">$NEW_FIRST_NAME$</param>
+    </params>
+</ServiceRequest>

@@ -1,0 +1,8 @@
+{
+  "service": "demo_PortalTestService",
+  "method": "updateFirstName",
+  "params": {
+    "param0": "$ENTITY-TO_BE_REPLACED_ID$",
+    "param1": "$NEW_FIRST_NAME$"
+  }
+}

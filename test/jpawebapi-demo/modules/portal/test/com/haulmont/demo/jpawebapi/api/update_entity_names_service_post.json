@@ -1,0 +1,15 @@
+{
+  "service": "demo_PortalTestService",
+  "method": "updateFirstNames",
+  "params": {
+    "param0": [
+      {
+        "id": "jpademo_TestEntity-$ENTITY_ID_1$"
+      },
+      {
+        "id": "jpademo_TestEntity-$ENTITY_ID_2$"
+      }
+    ],
+    "param1": "$NEW_FIRST_NAME$"
+  }
+}

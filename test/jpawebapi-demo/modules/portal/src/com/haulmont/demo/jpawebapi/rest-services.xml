@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2008-2016 Haulmont. All rights reserved.
+  ~ Use is subject to license terms, see http://www.cuba-platform.com/commercial-software-license for details.
+  -->
+
+<services xmlns="http://schemas.haulmont.com/cuba/rest-services.xsd">
+    <service name="cuba_DynamicAttributesCacheService">
+        <method name="loadCache"/>
+    </service>
+
+    <service name="demo_PortalTestService">
+        <method name="emptyMethod"/>
+        <method name="finAllEntities"/>
+        <method name="findEntityById"/>
+        <method name="updateFirstName"/>
+        <method name="updateFirstNames"/>
+        <method name="finAllUsers"/>
+    </service>
+</services>

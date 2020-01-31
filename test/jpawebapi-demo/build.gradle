@@ -1,0 +1,350 @@
+/*
+ * Copyright (c) 2008-2019 Haulmont.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+buildscript {
+    ext.cubaVersion = '7.3-SNAPSHOT'
+    repositories {
+        mavenLocal()
+        if (System.getenv('HAULMONT_REPOSITORY_URL')) {
+            maven {
+                credentials {
+                    username System.getenv('HAULMONT_REPOSITORY_USER')
+                    password System.getenv('HAULMONT_REPOSITORY_PASSWORD')
+                }
+                url System.getenv('HAULMONT_REPOSITORY_URL')
+            }
+        } else {
+            jcenter()
+
+            /*maven { url "https://dl.bintray.com/cuba-platform/main" }*/
+
+            maven {
+                url 'https://repo.cuba-platform.com/content/groups/work'
+                credentials {
+                    username 'cuba'
+                    password 'cuba123'
+                }
+            }
+        }
+    }
+    dependencies {
+        classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
+        classpath "com.haulmont.gradle:addon-gradle-plugin:1.1.2"
+    }
+}
+
+def modulePrefix = 'app'
+
+def globalModule = project(":${modulePrefix}-global")
+def coreModule = project(":${modulePrefix}-core")
+def webModule = project(":${modulePrefix}-web")
+def portalModule = project(":${modulePrefix}-portal")
+
+def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
+
+apply(plugin: 'cuba')
+apply(plugin: 'addon-gradle-plugin')
+
+cuba {
+    artifact {
+        group = 'com.haulmont.demo.jpawebapi'
+        version = '0.1'
+        isSnapshot = true
+    }
+    tomcat {
+        dir = "$project.rootDir/deploy/tomcat"
+    }
+    ide {
+        vcs = 'Git'
+        copyright = '''Copyright (c) 2008-$today.year Haulmont.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+'''
+    }
+}
+
+dependencies {
+    appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
+    appComponent("com.haulmont.addon.jpawebapi:jpawebapi-global:1.2-SNAPSHOT")
+}
+
+def hsql = 'org.hsqldb:hsqldb:2.4.1'
+
+configure([globalModule, coreModule, webModule, portalModule]) {
+    apply(plugin: 'java')
+    apply(plugin: 'maven')
+    apply(plugin: 'cuba')
+    apply(plugin: 'addon-gradle-plugin')
+
+    dependencies {
+        testCompile('junit:junit:4.12')
+    }
+
+    task sourceJar(type: Jar) {
+        from file('src')
+        classifier = 'sources'
+    }
+
+    artifacts {
+        archives sourceJar
+    }
+}
+
+configure(globalModule) {
+    entitiesEnhancing {
+        main {
+            enabled = true
+        }
+    }
+}
+
+configure(coreModule) {
+    configurations {
+        jdbc
+        dbscripts
+    }
+
+    dependencies {
+        compile(globalModule)
+        compileOnly(servletApi)
+        jdbc(hsql)
+        testRuntime(hsql)
+    }
+
+    task cleanConf(description: 'Cleans up conf directory', type: Delete) {
+        delete "$cuba.appHome/${modulePrefix}-core/conf"
+    }
+
+    task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
+        appName = "${modulePrefix}-core"
+        appJars(modulePrefix + '-global', modulePrefix + '-core')
+    }
+
+    def appDbName = 'jpademo'
+
+    task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
+        dbms = 'hsql'
+        host = 'localhost:9010'
+        dbName = appDbName
+        dbUser = 'sa'
+        dbPassword = ''
+    }
+
+    task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
+        dbms = 'hsql'
+        host = 'localhost:9010'
+        dbName = appDbName
+        dbUser = 'sa'
+        dbPassword = ''
+    }
+
+    task startDb(description: 'Starts local HSQLDB server', type: CubaHsqlStart) {
+        dbName = appDbName
+        dbPort = 9010
+    }
+
+    task stopDb(description: 'Stops local HSQLDB server', type: CubaHsqlStop) {
+        dbName = appDbName
+        dbPort = 9010
+    }
+}
+
+configure(webModule) {
+    configurations {
+        webcontent
+    }
+
+    dependencies {
+        compileOnly(servletApi)
+        compile(globalModule)
+
+        testCompile("httpunit:httpunit:1.7")
+        testCompile("rhino:js:1.7R2")
+        testCompile("jaxen:jaxen:1.1.6")
+    }
+
+    task webArchive(type: Zip) {
+        from file("$buildDir/web")
+        from file('web')
+        classifier = 'web'
+    }
+
+    artifacts {
+        archives webArchive
+    }
+
+    task deployConf(type: Copy) {
+        from file('src')
+        include "com/haulmont/demo/jpawebapi/**"
+        into "$cuba.appHome/${modulePrefix}/conf"
+    }
+
+    task clearMessagesCache(type: CubaClearMessagesCache) {
+        appName = "${modulePrefix}"
+    }
+    deployConf.dependsOn clearMessagesCache
+
+    task cleanConf(description: 'Cleans up conf directory', type: Delete) {
+        delete "$cuba.appHome/${modulePrefix}/conf"
+    }
+
+    task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
+        appName = "${modulePrefix}"
+        appJars(modulePrefix + '-global', modulePrefix + '-web')
+    }
+
+    task testPortalStart(type: Test, dependsOn: testClasses) {
+        include("com/haulmont/demo/jpawebapi/DeploymentPortalTest.class")
+        systemProperties = System.getProperties()
+    }
+
+    task testWebStart(type: Test, dependsOn: testClasses) {
+        include("com/haulmont/demo/jpawebapi/DeploymentWebTest.class")
+        systemProperties = System.getProperties()
+    }
+}
+
+configure(portalModule) {
+    dependencies {
+        compileOnly(servletApi)
+        compile(globalModule)
+
+        testCompile("httpunit:httpunit:1.7")
+        testCompile("rhino:js:1.7R2")
+        testCompile("jaxen:jaxen:1.1.6")
+        testRuntime(hsql)
+    }
+
+    def webappName = "${modulePrefix}-portal"
+
+    task deploy(dependsOn: assemble, type: CubaDeployment) {
+        appName = webappName
+        appJars(modulePrefix + '-global', modulePrefix + '-portal')
+    }
+
+    task webArchive(type: Zip) {
+        from file('web')
+        from file("$buildDir/web")
+        exclude '**/web.xml', '**/app.properties'
+        classifier = 'web'
+    }
+
+    task funcTest(dependsOn: ':prepareTest', description: 'Run functional tests', type: Test) {
+        scanForTestClasses = false
+        includes = ['**/*FT.class']
+        workingDir = "$projectDir/../../"
+    }
+
+    artifacts {
+        archives webArchive
+    }
+}
+
+task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
+    delete("$cuba.tomcat.dir/shared")
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core")
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}")
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-portal")
+}
+
+task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefix}-web:deploy", ":${modulePrefix}-portal:deploy"],
+        description: 'Redeploys applications and restarts local Tomcat') {
+    doLast {
+        ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
+            not {
+                socket(server: 'localhost', port: '8787')
+            }
+        }
+    }
+}
+restart.finalizedBy start
+
+/* ============= JPA WEB API testing =============== */
+
+task prepareTest(description: 'Prepare server for tests', dependsOn: [
+        setupTomcat,
+        coreModule.createDb,
+        coreModule.deploy,
+        webModule.deploy,
+        portalModule.deploy]) {
+
+    doLast {
+        // Start server
+        start.execute()
+
+        ant.waitfor(maxwait: 30, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
+            http(url: "http://localhost:8080/app")
+        }
+
+        // Delete out directory
+        File dir = new File("$projectDir/tests/ui/out")
+        if (dir.exists()) {
+            project.delete(dir)
+        }
+    }
+}
+
+/* ============= Deployment Testing =============== */
+
+task buildWar(type: CubaWarBuilding) {
+    singleWar = false
+    includeJdbcDriver = true
+    includeContextXml = true
+}
+
+task buildSingleWar(type: CubaWarBuilding) {
+    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
+    appHome = '${catalina.base}/work/app_home'
+    coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
+    includeJdbcDriver = true
+    includeContextXml = true
+}
+
+task copyWarToTomcat(type: Copy) {
+    from "${project.buildDir}/distributions/war"
+    include "*.war"
+    into "${cuba.tomcat.dir}/webapps"
+}
+
+task deploySingleWar(dependsOn: buildSingleWar, type: Copy) {
+    from file("$buildDir/distributions/war/app.war")
+    into file('../tomcat/webapps/')
+}
+
+task buildUberJar(type: CubaUberJarBuilding) {
+    coreJettyEnvPath = 'modules/core/web/META-INF/jetty-env.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate': true]
+    appName = 'app'
+    logbackConfigurationFile = "etc/uber-jar-logback.xml"
+}
+
+task buildSingleUberJar(type: CubaUberJarBuilding) {
+    coreJettyEnvPath = 'modules/core/web/META-INF/jetty-env.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate': true]
+    singleJar = true
+    logbackConfigurationFile = "etc/uber-jar-logback.xml"
+}
