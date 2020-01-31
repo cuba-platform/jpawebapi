@@ -16,7 +16,8 @@
  */
 
 buildscript {
-    ext.cubaVersion = '7.1.1'
+    ext.cubaVersion = rootProject.hasProperty('cubaVersion') ? rootProject['cubaVersion'] : '7.1-SNAPSHOT'
+    ext.addonVersion = rootProject.hasProperty('buildVersion') ? rootProject['buildVersion'] : '1.0-SNAPSHOT'
     repositories {
         mavenLocal()
         if (System.getenv('HAULMONT_REPOSITORY_URL')) {
@@ -29,14 +30,15 @@ buildscript {
             }
         } else {
             jcenter()
-            maven { url "https://dl.bintray.com/cuba-platform/main" }
-        }
-        // TODO: remove when 7.1.0 will be released
-        maven {
-            url 'https://repo.cuba-platform.com/content/groups/work'
-            credentials {
-                username 'cuba' 
-                password 'cuba123'
+
+            /*maven { url "https://dl.bintray.com/cuba-platform/main" }*/
+
+            maven {
+                url 'https://repo.cuba-platform.com/content/groups/work'
+                credentials {
+                    username 'cuba'
+                    password 'cuba123'
+                }
             }
         }
     }
@@ -71,8 +73,8 @@ bom.load file('modules/global/src/com/haulmont/addon/jpawebapi/bom.properties')
 cuba {
     artifact {
         group = 'com.haulmont.addon.jpawebapi'
-        version = '1.0'
-        isSnapshot = true
+        version = project.addonVersion.replace('-SNAPSHOT', '')
+        isSnapshot = project.addonVersion.endsWith('-SNAPSHOT')
     }
     tomcat {
         dir = "$project.rootDir/deploy/tomcat"
