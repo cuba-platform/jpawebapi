@@ -46,6 +46,7 @@ In case you want to install the add-on by manual editing or by building from sou
 
  | Platform Version | Add-on Version |
 |------------------|----------------|
+| 7.2.X            | 1.1.0          |
 | 7.1.X            | 1.0.0          |
 
 5. Click *Install* and apply the changes. The add-on will be installed to your project.
