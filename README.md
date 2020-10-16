@@ -6,9 +6,9 @@
 
 ## Overview
 
-The universal JPA web API enables to load and save any entities defined in the application data model by sending simple HTTP requests.
+The universal JPA web API enables loading and saving any entities defined in the application data model by sending simple HTTP requests.
 
-This provides an easy way to integrate with a wide range of third-party applications – from the JavaScript code executed in the browser to arbitrary systems running on Java, .NET, PHP or any other platform.
+The add-on provides an easy way to integrate with a wide range of third-party applications – from the JavaScript code executed in the browser to arbitrary systems running on Java, .NET, PHP or any other platform.
 
 Key API features:
 
@@ -19,7 +19,7 @@ Key API features:
 - Middleware service calls.
 - User authentication.
 
-Read addon [Wiki](https://github.com/cuba-platform/jpawebapi/wiki) for additional information.
+Read add-on [Wiki](https://github.com/cuba-platform/jpawebapi/wiki) for additional information.
 
 ## Installation
 
@@ -32,11 +32,11 @@ In case you want to install the add-on by manual editing or by building from sou
 1. Open your application in CUBA Studio. Check the latest version of CUBA Studio on the [CUBA Platform site](https://www.cuba-platform.com/download/previous-studio/).
 2. Go to *CUBA -> Marketplace* in the main menu.
 
- ![marketplace](img/marketplace.jpg)
+ ![marketplace](img/marketplace.png)
 
 3. Click the icon in the upper-right corner.
 
- ![by-coordinates](img/by-coordinates.jpg)
+ ![by-coordinates](img/by-coordinates.png)
 
 4. Paste the add-on coordinates in the corresponding field as follows:
 
@@ -59,6 +59,10 @@ After that the JPA Web API functionality will be available at:
 ## Customization
 
 JPA Web API URL can be customized via `jpawebapi.mapping.url` app property both for `web` and `portal` application modules.
+
+## Security
+
+Since CUBA Platform 7.2 you should create a new [role](https://doc.cuba-platform.com/manual-latest/roles.html) with included `permission-config.jpawebapi.api.enabled` permission and assign it to new users in order to grant them access to the add-on.
 
 ## Demo
 
