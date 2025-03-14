@@ -17,6 +17,7 @@
 
 package com.haulmont.addon.jpawebapi.api.controller;
 
+import com.haulmont.addon.jpawebapi.api.config.JpaWebApiConfig;
 import com.haulmont.bali.util.URLEncodeUtils;
 import com.haulmont.cuba.client.ClientConfig;
 import com.haulmont.cuba.core.app.DataService;
@@ -30,6 +31,7 @@ import com.haulmont.cuba.security.app.UserSessionService;
 import com.haulmont.cuba.security.global.NoUserSessionException;
 import com.haulmont.cuba.security.global.UserSession;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -52,6 +54,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -75,6 +78,9 @@ public class RestFileDownloadController {
 
     @Inject
     protected ClientConfig clientConfig;
+
+    @Inject
+    protected JpaWebApiConfig jpaWebApiConfig;
 
     protected String fileDownloadContext;
 
@@ -113,6 +119,9 @@ public class RestFileDownloadController {
             response.setHeader("Pragma", "no-cache");
 
             boolean attach = Boolean.valueOf(request.getParameter("a"));
+
+            attach = resolveAttachmentValue(attach, fd);
+
             response.setHeader("Content-Disposition", (attach ? "attachment" : "inline")
                     + "; filename=" + fileName);
 
@@ -176,6 +185,22 @@ public class RestFileDownloadController {
             }
         } finally {
             IOUtils.closeQuietly(os);
+        }
+    }
+
+    protected boolean resolveAttachmentValue(Boolean attachmentRequestParameterValue, FileDescriptor fileDescriptor) {
+        if (BooleanUtils.isTrue(attachmentRequestParameterValue)) {
+            return true;
+        }
+
+        String extension = fileDescriptor.getExtension();
+        if (StringUtils.isEmpty(extension)) {
+            // No extension - just download
+            return true;
+        } else {
+            // Check if file is allowed to be opened inline
+            List<String> inlineEnabledFileExtensions = jpaWebApiConfig.getInlineEnabledFileExtensions();
+            return !inlineEnabledFileExtensions.contains(StringUtils.lowerCase(extension));
         }
     }
 
